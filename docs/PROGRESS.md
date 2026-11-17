@@ -103,8 +103,19 @@
 - Bản 1.0.0: README, trang giới thiệu + nguồn Cydia (nhánh `gh-pages`, ảnh chụp với sách mẫu), mô tả gói không dấu (M21 của
   GramMusic).
 
+## 18/11/2026 — phát hành 1.0.0
+
+- Gói `vn.grambook.app_1.0.0_iphoneos-arm.deb` (`tools/build-release.sh`): 3.207.510 byte, sha256 `1cf961cd…`, không còn mã thử;
+  `symcheck` 305 ký hiệu, thiếu 0 trên iOS 6.1.3 (iPad mini 1) và iOS 5.1.1 (iPad 1).
+- GitHub: repo công khai **itovn/GramBook** (nhánh `main`), bản phát hành **v1.0.0** kèm `.deb`; trang giới thiệu kiểu iOS 6 + nguồn
+  Cydia ở nhánh `gh-pages` (https://itovn.github.io/GramBook/, nguồn `https://itovn.github.io/GramBook/cydia/` — `tools/update-cydia-
+  repo.sh`); tệp `.deb` trên nguồn Cydia khớp từng byte với bản trên GitHub. Trước khi đưa lên: rà IP / số điện thoại / tên chat /
+  mã peer khỏi tài liệu.
+- Đã cài bản phát hành 1.0.0 trên iPad mini 1 (thay bản thử): mở được, vẫn đăng nhập, tự mở lại sách đang đọc dở.
+
 ### Tiếp theo
 
 - [ ] Anh thử bằng tay: vuốt dọc ở mép trái (độ sáng), lật cong theo ngón tay với sách Kindle.
 - [ ] Thêm kênh sách thật (Nguồn → Thêm) để thử thư viện lớn: quét, tìm, bìa, tải về máy.
-- [ ] Thử iPad dọc, iPad 1 (iOS 5.1.1), đổi cỡ chữ / xoay máy giữ đúng chỗ đang đọc trên nhiều sách.
+- [ ] **iPad 1 (iOS 5.1.1)**: thử thật màn đọc (máy đang khoá màn hình — iOS 5 không mở khoá từ xa được, cần anh vuốt mở khoá);
+  xong thì cài bản phát hành thay bản thử. iPhone 5 (iOS 6.1.4): không kết nối được lúc phát hành — thử giao diện điện thoại sau.
