@@ -1,0 +1,16 @@
+Origin: GramBook
+Label: GramBook
+Suite: stable
+Version: 1.0
+Codename: ios6
+Architectures: iphoneos-arm
+Components: main
+Description: GramBook — đọc sách / ebook từ Telegram cho iPhone / iPad iOS 5 / iOS 6 đã jailbreak — https://itovn.github.io/GramBook/
+MD5Sum:
+ 25fd7ceafa95048c400c90ec424d53ce 705 Packages
+ 21962ce2581789b303d829101d5f9f3c 481 Packages.gz
+ 2957a79506bcf3862970bf33f7e392a3 540 Packages.bz2
+SHA256:
+ 069492d8ae26f3259e1534551465dfa68bea4fde89d275b87e291ab63a917e94 705 Packages
+ 76e3ceb2f07569bf61906cd3ea1edb2f9123df7186918bf184123e53ffda86cd 481 Packages.gz
+ 25b068af020afcec85a46bab9ded1a0bea0c9b7a2a4be4a7a710f38b7e41a676 540 Packages.bz2
