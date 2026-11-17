@@ -112,10 +112,12 @@
   repo.sh`); tệp `.deb` trên nguồn Cydia khớp từng byte với bản trên GitHub. Trước khi đưa lên: rà IP / số điện thoại / tên chat /
   mã peer khỏi tài liệu.
 - Đã cài bản phát hành 1.0.0 trên iPad mini 1 (thay bản thử): mở được, vẫn đăng nhập, tự mở lại sách đang đọc dở.
+- **iPad 1 (iOS 5.1.1, 247 MB RAM)** — thử thật sau khi phát hành (máy khoá màn hình lâu, rồi phiên GramMini đang dùng): EPUB «Bê Trọc»
+  mở 1,1 s, chương 1,3 MB → 9 phần / 29 màn; MOBI 0,6 s; AZW3 0,5 s; lật trang, nhảy chương, mục lục, Aa, đổi cỡ chữ, giao diện tối tại
+  chỗ, Đang đọc — đúng, chữ tiếng Việt đủ dấu; không có báo cáo lỗi nào. Đã cài bản phát hành 1.0.0 thay bản thử.
 
 ### Tiếp theo
 
 - [ ] Anh thử bằng tay: vuốt dọc ở mép trái (độ sáng), lật cong theo ngón tay với sách Kindle.
 - [ ] Thêm kênh sách thật (Nguồn → Thêm) để thử thư viện lớn: quét, tìm, bìa, tải về máy.
-- [ ] **iPad 1 (iOS 5.1.1)**: thử thật màn đọc (máy đang khoá màn hình — iOS 5 không mở khoá từ xa được, cần anh vuốt mở khoá);
-  xong thì cài bản phát hành thay bản thử. iPhone 5 (iOS 6.1.4): không kết nối được lúc phát hành — thử giao diện điện thoại sau.
+- [ ] iPhone 5 (iOS 6.1.4): không kết nối được lúc phát hành — thử giao diện điện thoại sau.

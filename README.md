@@ -16,7 +16,7 @@ Cydia.
 
 ## Máy chạy được
 
-iOS 5.0 – 6.1.x, đã jailbreak: iPhone 4 / 4S / 5, iPad 1 / 2 / 3 / 4 / mini 1, iPod touch 4 / 5. Đã thử trên iPad mini 1 (iOS 6.1.3);
+iOS 5.0 – 6.1.x, đã jailbreak: iPhone 4 / 4S / 5, iPad 1 / 2 / 3 / 4 / mini 1, iPod touch 4 / 5. Đã thử trên iPad mini 1 (iOS 6.1.3) và iPad 1 (iOS 5.1.1);
 `symcheck` (mọi hàm hệ thống app gọi đều có) trên iOS 6.1.3 và iOS 5.1.1.
 
 ## Có gì
