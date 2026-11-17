@@ -1,0 +1,9 @@
+[package]
+name = "gb-mobi"
+description = "GramBook: chuyển sách Kindle (MOBI6 / PRC / AZW, AZW3 / KF8, tệp kép) thành chương HTML + ảnh + mục lục cho màn đọc"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+# Chỉ dùng std (Rust thuần, không phụ thuộc ngoài): dựng cho armv7-apple-ios6 (build-std) như phần còn lại của lõi.
+[dependencies]

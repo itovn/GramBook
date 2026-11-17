@@ -1,0 +1,28 @@
+[package]
+name = "gm-core"
+description = "GramBook: lõi (phiên đăng nhập, thư viện sách từ Telegram, mở EPUB / MOBI, cổng nội bộ phục vụ sách cho UIWebView)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+gm-net = { path = "../gm-net" }
+# MOBI / AZW3 / AZW / PRC → các tệp chương HTML + ảnh / CSS (crate riêng, chỉ dùng std)
+gb-mobi = { path = "../gb-mobi" }
+grammers-client = { workspace = true }
+grammers-mtsender.workspace = true
+grammers-session = { workspace = true, features = ["serde"] }
+tokio = { workspace = true }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# Giải nén mục zip của EPUB (deflate thô) — Rust thuần; bộ đọc zip tự viết (zip.rs) cho ít phụ thuộc trên armv7
+miniz_oxide = "0.8"
+# Chuẩn hoá chữ về NFC khi phục vụ chương (dấu tổ hợp → chữ dựng sẵn — DECISIONS B7)
+unicode-normalization = "0.1"
+
+[target.'cfg(unix)'.dependencies]
+# statvfs (chỗ trống của máy), utimes (đánh dấu tệp đệm vừa dùng)
+libc = "0.2"
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["rt", "macros", "io-util", "net", "time"] }
