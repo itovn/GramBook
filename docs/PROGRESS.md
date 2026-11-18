@@ -123,7 +123,14 @@
   Anh vuốt thử bằng tay trên iPad mini 1 (AZW3 «Đạo Phật Ngày Nay»): đạt.
 - Bản dò giữa chừng làm mất thao tác cầm trang lật theo ngón tay (anh báo) — do cố ý để UIKit ném lỗi trong `setViewControllers`;
   bản sau bỏ, log xác nhận vuốt lật lại được. Gỡ `dataSource` / `delegate` của UIPageViewController khi đóng màn đọc.
-- Hai máy thử đang chạy bản thử (`1.0.0-1+debug`), không phải bản phát hành.
+
+## 18/11/2026 (chiều) — phát hành 1.0.1
+
+- Gói `vn.grambook.app_1.0.1_iphoneos-arm.deb` (`tools/build-release.sh`): 3.208.340 byte, sha256 `87b9cfc7…`, không còn mã thử;
+  `symcheck` 305 ký hiệu, thiếu 0 trên iOS 6.1.3 (iPad mini 1) và iOS 5.1.1 (iPad 1).
+- GitHub: bản phát hành **v1.0.1** (Latest) kèm `.deb`; trang giới thiệu + trang mô tả Cydia ghi «Bản 1.0.1» (thêm mục thay đổi);
+  nguồn Cydia có 1.0.0 và 1.0.1 — tệp trên nguồn Cydia khớp từng byte với bản trên GitHub (kiểm qua mạng sau khi Pages dựng xong).
+- Đã cài bản phát hành 1.0.1 trên iPad mini 1 (thay bản thử; tự mở lại sách đang đọc) và iPad 1: mở được, không báo cáo lỗi.
 
 ### Tiếp theo
 
