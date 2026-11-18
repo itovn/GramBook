@@ -163,3 +163,19 @@ Dò tự động từng chữ cái tiếng Việt (134 chữ: Ă Â Đ Ê Ô Ơ 
   trang đầu (app chết khi mở sách đó) thì thôi, khỏi kẹt vòng. Thử: ra nền → iOS tắt app → vào lại → đúng cuốn, đúng dòng đầu trang.
 - Biểu tượng mục «Bộ sưu tập» (hai ruy-băng chồng): đường viền hai ruy-băng cắt nhau trông như vỡ → xoá phần ruy-băng sau bị che.
 
+
+## B14. Mặt sau tờ giấy khi lật cong: giấy ngà do app vẽ (anh yêu cầu «giống giấy sách») — 18/11/2026
+
+- Lật một mặt (`doubleSided = NO`) thì iOS tự vẽ mặt sau: chữ trang in ngược phủ lớp trắng — trắng bệt, giao diện tối càng chói,
+  không có API đổi màu. → **Lật hai mặt** (`doubleSided = YES`), mặt sau là `GBPageVC` riêng (`back`): nền `GBReaderPrefs backFor:`
+  (Trắng → ngà nhạt `#F1EADA`, Giấy ngà → `#E8DCC0`, Xám → `#504F4C`, Đêm → `#1F1E1B` — sẫm hơn mặt trước một chút, như nằm
+  trong bóng tờ đang lật) + ảnh mặt trước lật ngang (`UIImageOrientationUpMirrored`), mờ 12 % — chữ hằn qua giấy. Không vẽ ảnh mới:
+  chỉ thêm lớp.
+- Luật số trang của UIPageViewController (gáy trái, hai mặt), đã thử iOS 6.1.3: đặt **không hiệu ứng → 1** trang (đưa 2 là ném
+  `NSInvalidArgumentException`); **có hiệu ứng → 2**: trang sẽ hiện + mặt sau tờ cong qua (tới: tờ đang đọc; lùi: tờ trước). Vuốt
+  thì dataSource bị hỏi hai lần: trang n → mặt sau tờ n → trang n + 1 (lùi: trang n → mặt sau tờ n − 1 → trang n − 1).
+- Lỗi ném giữa `setViewControllers` (bản dò) làm UIPageViewController kẹt: vuốt không cong theo ngón tay nữa — đừng bắt lỗi kiểu đó.
+- `dealloc` màn đọc gỡ `dataSource` / `delegate` của UIPageViewController (iOS 5 / 6 là `assign`): có một lần app chết (EXC_BAD_ACCESS
+  từ UIKit sau hoạt cảnh) khi mở sách khác lúc đang đọc; sau khi gỡ, thử lại (cả lúc trang đang lật) không bị.
+- Thử: iPad mini 1 (iOS 6.1.3) — vuốt tới / lùi, kéo dở rồi thả, chạm lật, nền Giấy ngà + Đêm; iPad 1 (iOS 5.1.1) — chạm lật
+  tới / lùi, không báo cáo lỗi. Anh vuốt thử bằng tay trên iPad mini 1: đạt. Phát hành trong bản 1.0.1.

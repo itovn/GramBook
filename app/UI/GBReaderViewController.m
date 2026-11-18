@@ -38,7 +38,7 @@ static BOOL GBPadIdiom(void) {
     NSArray *_spine, *_toc;
     NSArray *_marks;
     NSDictionary *_cfg;
-    UIColor *_paper;
+    UIColor *_paper, *_paperBack;  // nền trang · mặt sau tờ đang lật cong
     // Khung
     UIPageViewController *_pager;
     UIPanGestureRecognizer *_pagerPan;
@@ -99,6 +99,8 @@ static BOOL GBPadIdiom(void) {
     [_idleTimer invalidate];
     [_tickTimer invalidate];
     [self dropPopover];
+    _pager.dataSource = nil;  // iOS 5 / 6: hai cái này là assign — lật dở mà màn đọc đóng thì UIKit gọi vào vùng nhớ đã giải phóng
+    _pager.delegate = nil;
     _web.delegate = nil;
     [UIDevice currentDevice].batteryMonitoringEnabled = NO;
 }
@@ -115,22 +117,22 @@ static BOOL GBPadIdiom(void) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     _paper = [GBReaderPrefs paperFor:[GBReaderPrefs theme]];
+    _paperBack = [GBReaderPrefs backFor:[GBReaderPrefs theme]];
     self.view.backgroundColor = _paper;
     CGRect b = self.view.bounds;
-    // Lớp dưới: lật cong bằng ảnh chụp trang
+    // Lớp dưới: lật cong bằng ảnh chụp trang. Hai mặt: mặt sau do app vẽ (giấy ngà) — một mặt thì iOS phủ trắng lên chữ in ngược.
     _pager = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
                                              navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
                                                            options:@{UIPageViewControllerOptionSpineLocationKey: @(UIPageViewControllerSpineLocationMin)}];
     _pager.dataSource = self;
     _pager.delegate = self;
-    _pager.doubleSided = NO;
+    _pager.doubleSided = YES;
     [self addChildViewController:_pager];
     _pager.view.frame = b;
     _pager.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:_pager.view];
     [_pager didMoveToParentViewController:self];
-    [_pager setViewControllers:@[[GBPageVC pageWithImage:nil page:0 paper:_paper]] direction:UIPageViewControllerNavigationDirectionForward
-                      animated:NO completion:nil];
+    [self showLeaf:nil page:0];
     // WebView của chương: trong suốt — chỗ chưa vẽ kịp lộ đúng ảnh trang bên dưới
     _web = [[UIWebView alloc] initWithFrame:b];
     _web.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -476,6 +478,7 @@ static BOOL GBPadIdiom(void) {
 - (void)applyConfigKeepingPosition:(BOOL)keep {
     NSString *theme = [GBReaderPrefs theme];
     _paper = [GBReaderPrefs paperFor:theme];
+    _paperBack = [GBReaderPrefs backFor:theme];
     self.view.backgroundColor = _paper;
     _loading.backgroundColor = _paper;
     UIColor *ink = [[GBReaderPrefs inkFor:theme] colorWithAlphaComponent:0.45];
@@ -631,6 +634,21 @@ static BOOL GBPadIdiom(void) {
     _cover.hidden = NO;
 }
 
+- (GBPageVC *)frontOf:(UIImage *)img page:(NSInteger)page {
+    return [GBPageVC pageWithImage:img page:page paper:_paper];
+}
+
+- (GBPageVC *)backOf:(UIImage *)img page:(NSInteger)page {
+    return [GBPageVC backWithImage:img page:page paper:_paperBack];
+}
+
+/// Đặt trang đứng yên cho lớp lật cong. Không hiệu ứng thì chỉ một trang — đưa kèm mặt sau là UIKit ném lỗi (đã thử iOS 6.1.3);
+/// mặt sau chỉ đưa khi lật có hiệu ứng (animateFrom).
+- (void)showLeaf:(UIImage *)img page:(NSInteger)page {
+    [_pager setViewControllers:@[[self frontOf:img page:page]]
+                     direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+}
+
 /// Trang trước / sau. Trong chương: dùng ảnh đã chụp sẵn (không có thì chụp ngay); hết chương: nạp chương kế rồi lật.
 - (void)turn:(NSInteger)dir {
     if (!_opened || _loadingChapter || _busy) return;
@@ -696,12 +714,13 @@ static BOOL GBPadIdiom(void) {
     _busy = YES;
     [self setInfoHidden:YES];
     if ([turn isEqual:@"curl"] && from && to) {
-        [_pager setViewControllers:@[[GBPageVC pageWithImage:from page:_page paper:_paper]]
-                         direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+        [self showLeaf:from page:_page];
         _web.hidden = YES;
         _cover.hidden = YES;
         __weak GBReaderViewController *ws = self;
-        [_pager setViewControllers:@[[GBPageVC pageWithImage:to page:page paper:_paper]]
+        // Trang sẽ hiện + mặt sau của tờ cong qua: tới thì tờ đang đọc lật đi, lùi thì tờ trước lật về
+        GBPageVC *back = dir > 0 ? [self backOf:from page:_page] : [self backOf:to page:page];
+        [_pager setViewControllers:@[[self frontOf:to page:page], back]
                          direction:dir > 0 ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse
                           animated:YES
                         completion:^(BOOL finished) { [ws settleAt:page]; }];
@@ -764,8 +783,7 @@ static BOOL GBPadIdiom(void) {
     if ([[GBReaderPrefs turn] isEqual:@"none"]) return;
     NSInteger gen = _snapGen;
     _imgCur = [self renderWeb];
-    [_pager setViewControllers:@[[GBPageVC pageWithImage:_imgCur page:_page paper:_paper]]
-                     direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+    [self showLeaf:_imgCur page:_page];
     _imgNext = _imgPrev = nil;
     BOOL hasNext = _page + 1 < _screens, hasPrev = _page > 0;
     if (!hasNext && !hasPrev) return;
@@ -811,7 +829,9 @@ static BOOL GBPadIdiom(void) {
     return st == UIGestureRecognizerStateBegan || st == UIGestureRecognizerStateChanged;
 }
 
-- (UIViewController *)neighbor:(NSInteger)dir {
+/// Lật hai mặt: UIPageViewController hỏi lần lượt mặt sau của tờ sẽ cong rồi tới trang kế. Tới: trang n → mặt sau tờ n →
+/// trang n + 1; lùi: trang n → mặt sau tờ n − 1 → trang n − 1.
+- (UIViewController *)neighbor:(NSInteger)dir of:(UIViewController *)vc {
     if (!_opened || _loadingChapter || _busy || ![[GBReaderPrefs turn] isEqual:@"curl"]) return nil;
     NSInteger target = _page + dir;
     if (_snapping || target < 0 || target >= _screens) {
@@ -830,21 +850,29 @@ static BOOL GBPadIdiom(void) {
     [self hideChrome];
     _web.hidden = YES;
     [self setInfoHidden:YES];
-    return [GBPageVC pageWithImage:img page:target paper:_paper];
+    GBPageVC *pv = [vc isKindOfClass:[GBPageVC class]] ? (GBPageVC *)vc : nil;
+    if (pv.back) return [self frontOf:img page:target];
+    return dir > 0 ? [self backOf:pv.image ?: _imgCur page:_page] : [self backOf:img page:target];
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pvc viewControllerAfterViewController:(UIViewController *)vc {
-    return [self neighbor:1];
+    return [self neighbor:1 of:vc];
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pvc viewControllerBeforeViewController:(UIViewController *)vc {
-    return [self neighbor:-1];
+    return [self neighbor:-1 of:vc];
 }
 
 - (void)pageViewController:(UIPageViewController *)pvc didFinishAnimating:(BOOL)finished
    previousViewControllers:(NSArray *)prev transitionCompleted:(BOOL)completed {
-    GBPageVC *cur = (GBPageVC *)[pvc.viewControllers lastObject];
-    if (completed && [cur isKindOfClass:[GBPageVC class]]) {
+    GBPageVC *cur = nil;  // lật hai mặt: viewControllers có cả mặt sau — lấy trang đang hiện
+    for (GBPageVC *v in pvc.viewControllers) {
+        if ([v isKindOfClass:[GBPageVC class]] && !v.back) {
+            cur = v;
+            break;
+        }
+    }
+    if (completed && cur) {
         _busy = YES;
         [self settleAt:cur.page];
     } else {

@@ -164,6 +164,14 @@ static BOOL GBPad(void) {
     return [UIColor colorWithWhite:0.11 alpha:1];
 }
 
+/// Giấy ngà ấm như giấy sách in (không trắng bệt), sẫm hơn mặt trước một chút vì nằm trong bóng của tờ đang lật.
++ (UIColor *)backFor:(NSString *)t {
+    if ([t isEqual:@"sepia"]) return [UIColor colorWithRed:0xE8 / 255.0 green:0xDC / 255.0 blue:0xC0 / 255.0 alpha:1];
+    if ([t isEqual:@"gray"]) return [UIColor colorWithRed:0x50 / 255.0 green:0x4F / 255.0 blue:0x4C / 255.0 alpha:1];
+    if ([t isEqual:@"night"]) return [UIColor colorWithRed:0x1F / 255.0 green:0x1E / 255.0 blue:0x1B / 255.0 alpha:1];
+    return [UIColor colorWithRed:0xF1 / 255.0 green:0xEA / 255.0 blue:0xDA / 255.0 alpha:1];
+}
+
 @end
 
 #pragma mark - Trang ảnh
@@ -180,19 +188,32 @@ static BOOL GBPad(void) {
     return p;
 }
 
++ (GBPageVC *)backWithImage:(UIImage *)img page:(NSInteger)page paper:(UIColor *)paper {
+    GBPageVC *p = [self pageWithImage:img page:page paper:paper];
+    p->_back = YES;
+    return p;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = _paper ?: [UIColor whiteColor];
     _iv = [[UIImageView alloc] initWithFrame:self.view.bounds];
     _iv.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _iv.contentMode = UIViewContentModeTopLeft;
-    _iv.image = _image;
+    if (_back) _iv.alpha = 0.12;  // chữ mặt trước hằn qua giấy
+    _iv.image = [self shown:_image];
     [self.view addSubview:_iv];
+}
+
+/// Mặt sau: ảnh mặt trước lật ngang (nhìn từ phía sau tờ giấy).
+- (UIImage *)shown:(UIImage *)img {
+    if (!_back || !img) return img;
+    return [UIImage imageWithCGImage:img.CGImage scale:img.scale orientation:UIImageOrientationUpMirrored];
 }
 
 - (void)setImage:(UIImage *)image {
     _image = image;
-    _iv.image = image;
+    _iv.image = [self shown:image];
 }
 
 @end

@@ -1,6 +1,6 @@
 Package: vn.grambook.app
 Name: GramBook
-Version: 1.0.0
+Version: 1.0.1
 Architecture: iphoneos-arm
 Description: Doc sach / ebook luu tren Telegram cho iOS 5 / 6: EPUB, MOBI, AZW3, lat trang cong, giao dien toi (khong chinh thuc)
 Maintainer: GramBook

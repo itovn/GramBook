@@ -1,12 +1,16 @@
 #import <UIKit/UIKit.h>
 
-/// Một trang của UIPageViewController (lật cong): ảnh chụp trang của WebView (B5).
+/// Một trang của UIPageViewController (lật cong): ảnh chụp trang của WebView (B5). Lật hai mặt: mỗi tờ có thêm mặt sau (`back`)
+/// — giấy màu ngà (GBReaderPrefs backFor:), chữ của mặt trước in ngược, mờ, như giấy sách soi từ phía sau.
 @interface GBPageVC : UIViewController
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic, strong) UIColor *paper;
 /// Trang (màn) trong phần chương mà ảnh này chụp.
 @property (nonatomic) NSInteger page;
+@property (nonatomic, readonly) BOOL back;
 + (GBPageVC *)pageWithImage:(UIImage *)img page:(NSInteger)page paper:(UIColor *)paper;
+/// Mặt sau của tờ `page` (`img` là ảnh mặt trước), `paper` là màu mặt sau.
++ (GBPageVC *)backWithImage:(UIImage *)img page:(NSInteger)page paper:(UIColor *)paper;
 @end
 
 /// Mục lục + dấu trang của sách đang đọc. `pick` nhận {s, frag} (mục lục) hoặc {pos} (dấu trang).
@@ -59,4 +63,6 @@
 + (void)setWarm:(CGFloat)w;
 + (UIColor *)paperFor:(NSString *)theme;
 + (UIColor *)inkFor:(NSString *)theme;
+/// Mặt sau tờ đang lật cong.
++ (UIColor *)backFor:(NSString *)theme;
 @end

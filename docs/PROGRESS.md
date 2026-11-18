@@ -116,8 +116,17 @@
   mở 1,1 s, chương 1,3 MB → 9 phần / 29 màn; MOBI 0,6 s; AZW3 0,5 s; lật trang, nhảy chương, mục lục, Aa, đổi cỡ chữ, giao diện tối tại
   chỗ, Đang đọc — đúng, chữ tiếng Việt đủ dấu; không có báo cáo lỗi nào. Đã cài bản phát hành 1.0.0 thay bản thử.
 
+## 18/11/2026 (chiều) — mặt sau tờ giấy khi lật cong (DECISIONS B14)
+
+- Anh báo mặt sau tờ đang lật «trắng bệt, chưa giống giấy sách» → lật hai mặt, mặt sau do app vẽ: giấy ngà theo từng nền (Trắng / Giấy ngà
+  / Xám / Đêm), chữ của chính trang đó in ngược mờ 12 %. Thử trên iPad mini 1 (vuốt + chạm, tới / lùi) và iPad 1 (chạm).
+  Anh vuốt thử bằng tay trên iPad mini 1 (AZW3 «Đạo Phật Ngày Nay»): đạt.
+- Bản dò giữa chừng làm mất thao tác cầm trang lật theo ngón tay (anh báo) — do cố ý để UIKit ném lỗi trong `setViewControllers`;
+  bản sau bỏ, log xác nhận vuốt lật lại được. Gỡ `dataSource` / `delegate` của UIPageViewController khi đóng màn đọc.
+- Hai máy thử đang chạy bản thử (`1.0.0-1+debug`), không phải bản phát hành.
+
 ### Tiếp theo
 
-- [ ] Anh thử bằng tay: vuốt dọc ở mép trái (độ sáng), lật cong theo ngón tay với sách Kindle.
+- [ ] Anh thử bằng tay: vuốt dọc ở mép trái (độ sáng). (Lật cong theo ngón tay với sách Kindle: đạt — 18/11.)
 - [ ] Thêm kênh sách thật (Nguồn → Thêm) để thử thư viện lớn: quét, tìm, bìa, tải về máy.
 - [ ] iPhone 5 (iOS 6.1.4): không kết nối được lúc phát hành — thử giao diện điện thoại sau.
