@@ -69,6 +69,8 @@ void gm_call(const char *request_json, gm_cb on_result, void *ctx);
 | `fav.set` / `want.set` | `key`, `on` | `{on}` |
 | `cache.stats` / `cache.clear` / `cache.set` | như GramMusic, loại: offline, books, cover, avatar, other | |
 | `settings.get` / `settings.set` | `secure_dns` | |
+| `http.get` | `url` (chỉ https), `headers`? | `{code, text}` (≤ 2 MB) — cập nhật OTA đọc danh sách bản trên GitHub (DECISIONS B16, như GramMini) |
+| `http.download` | `url` (chỉ https, chuyển hướng cũng https), `path` | `{path, size, sha256}` (≤ 128 MB, qua tệp `.part` 0600); báo `http.progress`. Lỗi `NETWORK` / `TIMEOUT` của `http.*` không đổi `net.state` |
 
 ## Sự kiện
 
@@ -77,6 +79,7 @@ void gm_call(const char *request_json, gm_cb on_result, void *ctx);
 | `auth.state` / `auth.dead` / `net.state` / `sync.state` / `library.changed` / `cache.cleared` | như GramMusic |
 | `file.progress` / `file.done` / `file.error` | `key` (+ `have`, `total` khúc / `code`, `msg`) — tải tệp sách đang mở |
 | `dl.progress` / `dl.done` / `dl.error` | hàng tải về máy |
+| `http.progress` | `url`, `done`, `total` (byte; ~3 lần / giây) — `http.download` |
 
 ## Cổng sách (serve.rs)
 

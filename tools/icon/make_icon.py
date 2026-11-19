@@ -2,7 +2,8 @@
 sáng, máy bay giấy bay ra từ trang sách, nền xanh lam → chàm. Ô biểu tượng trong ảnh mẫu cao hơn rộng (950 × 1021) → cắt ô vuông
 944 px (lùi 3 px vào trong mép trái / phải, bớt lề trên / dưới — sách và máy bay vẫn cách mép ~110 px), bo góc lại như mẫu.
 
-    python tools/icon/glass_icon.py Tham_Khao/logo/logo1.png tools/icon/icon-1024.png   # bản đang dùng: nền kính mờ kiểu macOS Tahoe
+    python tools/icon/neon_icon.py Tham_Khao/logo/logo2.png tools/icon/icon-1024.png    # bản đang dùng: mẫu 2, ô kính viền neon (B15)
+    python tools/icon/glass_icon.py Tham_Khao/logo/logo1.png tools/icon/icon-1024.png   # (mẫu 1: nền kính mờ kiểu macOS Tahoe — B12)
     python tools/icon/make_icon.py from-ref Tham_Khao/logo/logo1.png 123 873 944   # (bản đầu: cắt nguyên ô của mẫu) → icon-1024.png
     python tools/icon/make_icon.py app/Resources                                    # các cỡ iOS 5 / 6 từ icon-1024.png
     python tools/icon/make_icon.py draw                                             # (mẫu tạm vẽ bằng mã — trước khi có mẫu của anh)

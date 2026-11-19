@@ -132,7 +132,34 @@
   nguồn Cydia có 1.0.0 và 1.0.1 — tệp trên nguồn Cydia khớp từng byte với bản trên GitHub (kiểm qua mạng sau khi Pages dựng xong).
 - Đã cài bản phát hành 1.0.1 trên iPad mini 1 (thay bản thử; tự mở lại sách đang đọc) và iPad 1: mở được, không báo cáo lỗi.
 
+## 19/11/2026 — biểu tượng app theo mẫu thứ hai (DECISIONS B15)
+
+- Anh đưa mẫu mới `Tham_Khao/logo/logo2.png` (ô kính viền neon, sách mở + máy bay giấy trên nền chàm). Cắt ô biểu tượng của mẫu,
+  nắn 4 góc từ bo 25 % về 16,5 % (bằng mặt nạ iOS 5 / 6) — `tools/icon/neon_icon.py`; đủ 8 cỡ iOS 5 / 6 (29 – 144 px), xem trên nền
+  tối và sáng: rõ cả ở 29 px.
+
+## 19/11/2026 — cập nhật OTA như GramMini (DECISIONS B16)
+
+- Lõi: `http.get` / `http.download` (reqwest + rustls); app: `GMUpdate` (GitHub Releases, hỏi trước, tải, kiểm SHA-256), Cài đặt →
+  Phiên bản (chạm) kiểm ngay; công cụ `gbupdate` (setuid root, chữ ký số RSA-3072 — khoá riêng của GramBook ở `keys/`), postinst,
+  `tools/sign-release.sh`; bản thành 1.0.2 (control + Info.plist). Anh chốt: cập nhật xong **luôn respring** như GramMini.
+- PC: `cargo test -p gm-core` 40 / 40; `gm-cli svc … http.download` tải gói v1.0.1 thật từ GitHub (qua chuyển hướng) 1,2 giây,
+  SHA-256 khớp `digest` của GitHub, có `http.progress`; link `http://` bị từ chối.
+- iPad mini 1 (iOS 6.1.3, bản thử): `gbupdate` root:wheel 4755, thư mục 0755. Kiểm tay qua GitHub: «bản mới nhất 1.0.1 (đang dùng
+  1.0.2)» ~0,5–3 giây. `gbupdate --verify`: chữ ký đúng → 0; sửa 1 bit → 72; mobile gọi `--verify` → 64; tiến trình không phải
+  GramBook gọi cài → 69; tệp ngoài thư mục tải → 65. **OTA trọn luồng** (`otalocal`, gói thử 1.0.2-2 ký bằng khoá mới, đang mở sách):
+  `gbupdate → 0` → đóng app → `dpkg -i` → 0 → respring → app tự mở lại sau 14 giây, mở lại đúng cuốn, đúng trang (1/14 của «PHẦN
+  II»); không `uicache` (Info.plist chỉ đổi số bản); thư mục tải + bản chép trong `/var/root` đã dọn. Cài lại cùng bản → hộp «Không
+  cài được (bản này không mới hơn…, mã 73)»; chữ ký sai → «(chữ ký số không đúng, mã 72)».
+- Chưa thử: tải gói qua app trên máy thật từ một bản phát hành có `.sig` (cần phát hành 1.0.2), hộp «Có bản mới», iPad 1 (iOS 5).
+  Lúc thử có người dùng iPad mini (mở app Cài đặt, xoay máy) → dừng thử trên iPad, phần tải GitHub thử bằng lõi trên PC.
+
 ### Tiếp theo
+
+- [ ] Phát hành 1.0.2 (biểu tượng mới B15 + OTA B16): `build-release.sh` → `sign-release.sh` → GitHub Release kèm `.deb` + `.sig`,
+  nguồn Cydia, trang giới thiệu (biểu tượng mới). Máy đang chạy 1.0.0 / 1.0.1 lên 1.0.2 qua Cydia một lần.
+- [ ] Thử OTA từ GitHub thật: cài bản thử đánh số thấp hơn (1.0.1-x, có `gbupdate`) rồi để app tự lên 1.0.2 — iPad mini 1 + iPad 1.
+- [ ] Sao lưu `keys/ota-sign.key` ra ngoài máy (mất khoá → máy chạy 1.0.2 phải cập nhật qua Cydia một lần).
 
 - [ ] Anh thử bằng tay: vuốt dọc ở mép trái (độ sáng). (Lật cong theo ngón tay với sách Kindle: đạt — 18/11.)
 - [ ] Thêm kênh sách thật (Nguồn → Thêm) để thử thư viện lớn: quét, tìm, bìa, tải về máy.

@@ -6,6 +6,7 @@
 #import "GMProxyViewController.h"
 #import "GMRootController.h"
 #import "GMTheme.h"
+#import "GMUpdate.h"
 
 /// Bảng chọn dùng khối (UIActionSheet không giữ delegate).
 @interface GMChoice : NSObject <UIActionSheetDelegate, UIAlertViewDelegate>
@@ -188,8 +189,7 @@ enum { GMSecAccount, GMSecLibrary, GMSecPlayback, GMSecApp, GMSecAbout, GMSecLog
         c.textLabel.text = @"Phiên bản";
         c.detailTextLabel.text = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
         c.imageView.image = [GMTheme settingsIcon:@"info"];
-        c.accessoryType = UITableViewCellAccessoryNone;
-        c.selectionStyle = UITableViewCellSelectionStyleNone;
+        c.accessoryType = UITableViewCellAccessoryDisclosureIndicator;  // chạm: kiểm tra bản mới (OTA)
     } else {
         c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
         c.textLabel.text = @"Đăng xuất";
@@ -236,6 +236,8 @@ enum { GMSecAccount, GMSecLibrary, GMSecPlayback, GMSecApp, GMSecAbout, GMSecLog
                 [app reloadTheme];
             });
         }
+    } else if (ip.section == GMSecAbout) {
+        [GMUpdate checkManual];
     } else if (ip.section == GMSecLogout) {
         GMConfirm(@"Đăng xuất?", @"Sách đã tải về máy và vị trí đọc vẫn giữ. Đăng nhập lại để đọc tiếp sách từ Telegram.", @"Đăng xuất", ^{
             [GMCore call:@"auth.logout" args:nil done:nil];

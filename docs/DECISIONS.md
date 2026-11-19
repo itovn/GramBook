@@ -179,3 +179,47 @@ Dò tự động từng chữ cái tiếng Việt (134 chữ: Ă Â Đ Ê Ô Ơ 
   từ UIKit sau hoạt cảnh) khi mở sách khác lúc đang đọc; sau khi gỡ, thử lại (cả lúc trang đang lật) không bị.
 - Thử: iPad mini 1 (iOS 6.1.3) — vuốt tới / lùi, kéo dở rồi thả, chạm lật, nền Giấy ngà + Đêm; iPad 1 (iOS 5.1.1) — chạm lật
   tới / lùi, không báo cáo lỗi. Anh vuốt thử bằng tay trên iPad mini 1: đạt. Phát hành trong bản 1.0.1.
+
+## B15. Biểu tượng app theo mẫu thứ hai: ô kính viền neon — 19/11/2026
+
+- Mẫu: `Tham_Khao/logo/logo2.png` (2752 × 1536): ô biểu tượng viền kính neon (lam → tím → hồng cam, mạch điện mảnh), màn hình chàm
+  bên trong có quyển sách mở phát sáng + máy bay giấy + hạt sáng; nền tối lưới sàn và dấu ✦ góc dưới phải nằm ngoài ô (bỏ).
+- Ô trong mẫu vuông 1326 px (x 713 – 2039, y 105 – 1433, nằm giữa ảnh), góc bo ≈ 25 % — tròn hơn mặt nạ 16,5 % đã chọn ở B12. Không
+  bo theo mẫu (lệch hẳn các biểu tượng khác trên SpringBoard), không cắt mặt nạ 16,5 % thẳng vào (lộ nền tối + lưới ở 4 góc) → **nắn 4
+  góc**: trong hộp góc 560 px, mỗi tia từ góc trong của hộp kéo dãn dải ngoài (viền + ít nền màn hình, 230 px) cho mép bo 25 % khớp
+  mép bo 16,5 %; sách, máy bay và hai cạnh hộp giữ nguyên. Viền ở góc chéo dày hơn ~20 %, mắt thường không thấy. Phần trong suốt
+  ngoài góc mang màu viền (không phải nền tối của mẫu) để thu nhỏ không ám mép.
+- Lệnh: `python tools/icon/neon_icon.py Tham_Khao/logo/logo2.png tools/icon/icon-1024.png` rồi `python tools/icon/make_icon.py
+  app/Resources` (chỉ Pillow, `Image.transform(MESH)` lưới 6 px). `glass_icon.py` (mẫu 1, kính mờ) giữ lại để dựng lại bản cũ.
+- Đổi biểu tượng của app đã cài vẫn cần respring (B12). Trang giới thiệu / nguồn Cydia (`gh-pages`: `apple-touch-icon.png`,
+  `favicon.png`, `img/icon.png`, `cydia/CydiaIcon.png`) còn biểu tượng cũ tới bản phát hành sau.
+
+## B16. Cập nhật OTA như GramMini (anh yêu cầu) — 19/11/2026
+
+- Chép nguyên cơ chế OTA của GramMini (D33 của GramMini — đã kiểm bảo mật, thử trọn luồng trên iOS 5.1.1 và iOS 6):
+  - **Lõi**: `http.get` / `http.download` (reqwest + rustls + bộ gốc Mozilla — iOS 5 / 6 không tự vào được GitHub; cùng rustls /
+    ring với DNS mã hoá của gm-net). Chỉ https (cả chuyển hướng), ≤ 2 MB chữ / ≤ 128 MB tệp, tệp tạm `.part` 0600, SHA-256 lúc tải,
+    sự kiện `http.progress`. Lỗi mạng của `http.*` không đổi `net.state` (GitHub bị chặn không có nghĩa Telegram mất mạng).
+  - **App** (`Core/GMUpdate`): đọc `releases/latest` (Info.plist `GMUpdateURL` = `api.github.com/repos/itovn/GramBook`), tìm
+    `vn.grambook.app_<bản>_iphoneos-arm.deb` + `<tệp>.sig`; kiểm sau 10 giây lúc mở app và khi quay lại app (≤ 6 giờ / lần); hỏi
+    trước (ghi chú phát hành; «Để sau» = không hỏi lại bản đó 24 giờ); Cài đặt → **Phiên bản** (chạm) kiểm ngay. Chỉ nhận link tải
+    `github.com/itovn/GramBook/releases/download/`; kiểm kích thước + `digest` SHA-256 của GitHub. Không cần đăng nhập Telegram.
+  - **Công cụ cài** `/usr/libexec/grambook/gbupdate` (setuid root, postinst `chown root:wheel` + `chmod 4755`): bỏ môi trường của bên
+    gọi; chỉ GramBook gọi được (tiến trình cha); chép gói vào `/var/root/GramBook-update` (0700) rồi kiểm **chữ ký số** RSA-3072
+    PKCS#1 v1.5 + SHA-256 trên bản chép; đúng gói `vn.grambook.app`; bản mới hơn bản đang cài (mã 72 chữ ký sai, 73 không mới hơn,
+    69 không phải app gọi); tách nền → đóng app → `dpkg -i` → **luôn khởi động lại SpringBoard** (anh yêu cầu, như GramMini) →
+    mở lại app; Info.plist đổi ngoài số bản (tên, loại tệp «Mở bằng», URL…) thì `uicache` (quyền mobile) trước. iOS 5: sau respring
+    máy về màn khoá → không tự mở lại app được, mở khoá là thấy bản mới. Nhật ký `/var/root/GramBook-update/install.log`.
+  - **Khoá ký riêng của GramBook** (không dùng chung khoá GramMini — lộ khoá một app không ảnh hưởng app kia): `keys/ota-sign.key`
+    (chỉ ở máy phát hành, không lên git), chứng chỉ gắn trong `app/Helper/ota_cert.h` (CN=GramBook OTA signing, SHA-256
+    `CB:6C:87:31:…:54:A3:54`). Ký: `tools/sign-release.sh <gói>` → `<gói>.sig` đính kèm GitHub Release cùng `.deb`. Mất khoá → máy
+    đang chạy phải cập nhật qua Cydia một lần (bản mới gắn khoá mới) — cần sao lưu khoá ra ngoài máy.
+- Bản đầu chỉ respring khi biểu tượng / Info.plist đổi (GramBook không có tweak SpringBoard như GMNotify của GramMini); anh chốt
+  **cập nhật xong luôn respring** như GramMini.
+- Trước khi gọi `gbupdate` (công cụ đóng app bằng SIGTERM): màn đọc lưu vị trí (`GMUpdateWillInstallNotification`), chờ 0,3 giây,
+  `app.flush` xong mới gọi → mở lại đúng trang.
+- Cydia: postinst xin nút «Restart SpringBoard» (như GramMini; postinst cũng xoá IconsCache của app); OTA (`GRAMBOOK_OTA=1` —
+  `gbupdate` tự respring) và `dpkg -i` qua SSH thì không.
+- Máy đang chạy 1.0.0 / 1.0.1 (chưa có `gbupdate`) phải lên 1.0.2 qua Cydia một lần; từ 1.0.2 trở đi tự cập nhật.
+- Lệnh thử (bản thử): `updateapi <url>` (nguồn khác), `updatecheck`, `otalocal <tệp>` (cài gói + `.sig` đã chép vào
+  `Documents/GramBook-update` — thử `gbupdate` không cần GitHub), `alertbtn <i>`.

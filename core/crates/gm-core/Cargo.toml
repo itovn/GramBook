@@ -19,6 +19,10 @@ serde_json = "1"
 miniz_oxide = "0.8"
 # Chuẩn hoá chữ về NFC khi phục vụ chương (dấu tổ hợp → chữ dựng sẵn — DECISIONS B7)
 unicode-normalization = "0.1"
+# HTTPS cho cập nhật OTA (GitHub Releases — DECISIONS B16, chép từ GramMini): rustls + bộ chứng chỉ gốc Mozilla đóng trong tệp chạy
+# — iOS 5 / 6 không tự vào được GitHub (TLS / chứng chỉ gốc cũ). Cùng rustls / ring với gm-net (ring vá armv7: tools/rust/cargo-ios6.sh)
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls-webpki-roots"] }
+sha2 = "0.11"
 
 [target.'cfg(unix)'.dependencies]
 # statvfs (chỗ trống của máy), utimes (đánh dấu tệp đệm vừa dùng)

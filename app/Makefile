@@ -27,3 +27,16 @@ CORE_LIB_DIR ?= $(abspath $(CURDIR)/../../target-ios/armv7-apple-ios6/release)
 GramBook_LDFLAGS = -L$(CORE_LIB_DIR) -lgm_ffi -Wl,-dead_strip
 
 include $(THEOS_MAKE_PATH)/application.mk
+
+# Công cụ cài bản cập nhật OTA (Helper/gbupdate.c — chép gmupdate của GramMini): quyền root nhờ setuid — layout/DEBIAN/postinst
+# đặt chown root + chmod 4755. Quyền com.apple.springboard.launchapplications để mở lại app sau khi cài (DECISIONS B16).
+TOOL_NAME = gbupdate
+gbupdate_FILES = Helper/gbupdate.c
+gbupdate_FRAMEWORKS = CoreFoundation Security
+gbupdate_INSTALL_PATH = /usr/libexec/grambook
+gbupdate_CODESIGN_FLAGS = -SHelper/entitlements.plist -Hsha1
+include $(THEOS_MAKE_PATH)/tool.mk
+
+# postinst cần quyền chạy (tệp chép từ Windows không giữ bit x)
+before-package::
+	chmod 0755 $(THEOS_STAGING_DIR)/DEBIAN/postinst

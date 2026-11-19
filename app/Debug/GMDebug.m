@@ -6,6 +6,7 @@
 #import "GMLog.h"
 #import "GMRootController.h"
 #import "GMTheme.h"
+#import "GMUpdate.h"
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 
@@ -147,6 +148,28 @@ static NSString *GMShort(id v) {
 #pragma clang diagnostic pop
         } else {
             GMLog(@"[thử] perform: %@ không có %@", NSStringFromClass([top class]), arg);
+        }
+    } else if ([cmd isEqual:@"updateapi"]) {
+        // updateapi <url> — nguồn bản mới để thử (rỗng = dùng Info.plist); updatecheck — kiểm ngay như chạm «Phiên bản»
+        if (arg.length) [[NSUserDefaults standardUserDefaults] setObject:arg forKey:@"update.api"];
+        else [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"update.api"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"update.snooze"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    } else if ([cmd isEqual:@"updatecheck"]) {
+        [GMUpdate checkManual];
+    } else if ([cmd isEqual:@"otalocal"]) {
+        // otalocal <tệp .deb> — cài gói + <tệp>.sig đã chép vào Documents/GramBook-update qua gbupdate (thử OTA không cần GitHub)
+        [GMUpdate debugInstall:arg];
+    } else if ([cmd isEqual:@"alertbtn"]) {
+        // alertbtn <i> — bấm nút i của hộp thoại của app (UIAlertView của GramBook, không phải hộp hệ thống)
+        for (UIWindow *w in [UIApplication sharedApplication].windows) {
+            for (UIView *v in w.subviews) {
+                if (![v isKindOfClass:[UIAlertView class]]) continue;
+                UIAlertView *a = (UIAlertView *)v;
+                GMLog(@"[thử] hộp «%@»: nút %ld «%@»", a.title, (long)arg.integerValue, [a buttonTitleAtIndex:arg.integerValue]);
+                if ([a.delegate respondsToSelector:@selector(alertView:clickedButtonAtIndex:)]) [a.delegate alertView:a clickedButtonAtIndex:arg.integerValue];
+                [a dismissWithClickedButtonIndex:arg.integerValue animated:YES];
+            }
         }
     } else {
         GMLog(@"[thử] lệnh lạ: %@", cmd);

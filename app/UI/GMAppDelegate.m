@@ -6,6 +6,7 @@
 #import "GMLoginViewController.h"
 #import "GMRootController.h"
 #import "GMTheme.h"
+#import "GMUpdate.h"
 #ifdef DEBUG
 #import "GMDebug.h"
 #endif
@@ -35,6 +36,7 @@
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(event:) name:GMCoreEventNotification object:nil];
     [self checkAuth];
+    [GMUpdate start];  // kiểm bản mới (OTA) sau 10 giây, khi quay lại app tối đa 6 giờ một lần
 #ifdef DEBUG
     [GMDebug start];
 #endif

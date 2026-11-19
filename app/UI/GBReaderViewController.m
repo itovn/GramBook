@@ -6,6 +6,7 @@
 #import "GMCore.h"
 #import "GMLog.h"
 #import "GMTheme.h"
+#import "GMUpdate.h"
 #import <QuartzCore/QuartzCore.h>
 
 /// Chờ WebKit vẽ xong vùng vừa cuộn tới rồi mới chụp (iPad mini 1 — chỉnh khi thử).
@@ -233,6 +234,8 @@ static BOOL GBPadIdiom(void) {
     [self buildLoading];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(coreEvent:) name:GMCoreEventNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResign) name:UIApplicationWillResignActiveNotification object:nil];
+    // Cập nhật OTA: gbupdate đóng app bằng SIGTERM — lưu vị trí trước (GMUpdate chờ một nhịp rồi mới ghi xuống đĩa)
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(savePos) name:GMUpdateWillInstallNotification object:nil];
     [self open];
 }
 

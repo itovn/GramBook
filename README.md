@@ -38,12 +38,17 @@ iOS 5.0 – 6.1.x, đã jailbreak: iPhone 4 / 4S / 5, iPad 1 / 2 / 3 / 4 / mini 
 - **Gửi cho bạn qua Telegram**: chuyển tiếp tin chứa sách (không tải lên lại) hoặc gửi sách trên máy; tôn trọng «Hạn chế lưu nội
   dung» của chat (không gửi tiếp, không chép chữ).
 - **MTProxy** (`dd`, `ee` fake-TLS) và SOCKS5; **DNS mã hoá** (DoH / DoT: NextDNS → Cloudflare → Google, lỗi hết thì DNS của máy).
+- **Tự cập nhật (OTA)** từ bản 1.0.2: app kiểm bản mới trên GitHub Releases, hỏi trước, tải, kiểm SHA-256 + chữ ký số của người
+  phát hành rồi cài, tự khởi động lại SpringBoard và mở lại app.
 
 ## Cài đặt
 
 - **Cydia:** thêm nguồn `https://itovn.github.io/GramBook/cydia/` rồi cài **GramBook**.
 - **Tay:** tải `vn.grambook.app_<bản>_iphoneos-arm.deb` ở [Releases](https://github.com/itovn/GramBook/releases), chép vào máy,
   `dpkg -i`, rồi `uicache` (hoặc khởi động lại SpringBoard).
+
+Từ bản 1.0.2, các bản sau tự cập nhật trong app (Cài đặt → Phiên bản: kiểm ngay). Máy đang chạy 1.0.0 / 1.0.1 cập nhật lên 1.0.2
+qua Cydia một lần.
 
 ## Dựng từ mã nguồn
 
