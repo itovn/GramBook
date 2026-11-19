@@ -151,15 +151,28 @@
   `gbupdate → 0` → đóng app → `dpkg -i` → 0 → respring → app tự mở lại sau 14 giây, mở lại đúng cuốn, đúng trang (1/14 của «PHẦN
   II»); không `uicache` (Info.plist chỉ đổi số bản); thư mục tải + bản chép trong `/var/root` đã dọn. Cài lại cùng bản → hộp «Không
   cài được (bản này không mới hơn…, mã 73)»; chữ ký sai → «(chữ ký số không đúng, mã 72)».
-- Chưa thử: tải gói qua app trên máy thật từ một bản phát hành có `.sig` (cần phát hành 1.0.2), hộp «Có bản mới», iPad 1 (iOS 5).
-  Lúc thử có người dùng iPad mini (mở app Cài đặt, xoay máy) → dừng thử trên iPad, phần tải GitHub thử bằng lõi trên PC.
+- Lúc thử, app Cài đặt / nút Home / respring lạ trên iPad mini là của phiên Glass 6 (tweak Glass6SB / Glass6UI, CBFloat ghi «sẵn sàng
+  (SpringBoard)» mỗi lần respring) — hỏi qua tin nhắn giữa các phiên, phiên đó dừng nhường máy rồi mới thử tiếp.
+
+## 19/11/2026 — phát hành 1.0.2 (anh duyệt)
+
+- Gói `vn.grambook.app_1.0.2_iphoneos-arm.deb` (`tools/build-release.sh`): 3.610.310 byte, sha256 `47a3f420…`, không còn mã thử,
+  có `gbupdate` + postinst; `symcheck` 368 ký hiệu (gồm `gbupdate`), thiếu 0 trên iOS 6.1.3 (iPad mini 1) và iOS 5.1.1 (iPad 1). Ký:
+  `tools/sign-release.sh` → `.sig` 384 byte.
+- GitHub: bản phát hành **v1.0.2** (Latest) kèm `.deb` + `.sig`; API `releases/latest` có `digest` SHA-256 cho cả hai; tải lại từ
+  GitHub = Cydia (cùng SHA-256), `openssl dgst -verify` chữ ký đúng. Trang giới thiệu «Bản 1.0.2» + mục «Tự cập nhật», trang mô tả
+  Cydia có mục 1.0.2, ảnh biểu tượng của trang / nguồn Cydia đổi theo biểu tượng mới; nguồn Cydia có 1.0.0 / 1.0.1 / 1.0.2.
+- **OTA từ GitHub thật — đạt** (iPad mini 1, bản thử 1.0.1-1 có `gbupdate` → bản phát hành 1.0.2): kiểm tự động sau 10 giây → hộp
+  «Có bản mới 1.0.2» (ghi chú phát hành) → «Cập nhật» → «Đang tải bản 1.0.2… 73 % (2,5 MB / 3,4 MB)» → tải 2,2 giây + chữ ký →
+  `gbupdate → 0` → `dpkg -i` → 0 → respring → app 1.0.2 tự mở lại sau 14 giây, mở lại cuốn đang đọc; kiểm lại: «đang dùng 1.0.2».
+- iPad 1 (iOS 5.1.1, máy đang khoá — không chạm «Cập nhật» được): cài bản phát hành 1.0.2 bằng dpkg, `gbupdate` root 4755,
+  `gbupdate --verify` gói phát hành → chữ ký đúng (Security.framework của iOS 5 kiểm được), chữ ký sửa → 72; respring để hiện biểu
+  tượng mới.
 
 ### Tiếp theo
 
-- [ ] Phát hành 1.0.2 (biểu tượng mới B15 + OTA B16): `build-release.sh` → `sign-release.sh` → GitHub Release kèm `.deb` + `.sig`,
-  nguồn Cydia, trang giới thiệu (biểu tượng mới). Máy đang chạy 1.0.0 / 1.0.1 lên 1.0.2 qua Cydia một lần.
-- [ ] Thử OTA từ GitHub thật: cài bản thử đánh số thấp hơn (1.0.1-x, có `gbupdate`) rồi để app tự lên 1.0.2 — iPad mini 1 + iPad 1.
 - [ ] Sao lưu `keys/ota-sign.key` ra ngoài máy (mất khoá → máy chạy 1.0.2 phải cập nhật qua Cydia một lần).
+- [ ] Thử luồng «Cập nhật» trên iPad 1 (iOS 5) ở bản sau: sau respring iOS 5 về màn khoá, mở khoá là thấy bản mới.
 
 - [ ] Anh thử bằng tay: vuốt dọc ở mép trái (độ sáng). (Lật cong theo ngón tay với sách Kindle: đạt — 18/11.)
 - [ ] Thêm kênh sách thật (Nguồn → Thêm) để thử thư viện lớn: quét, tìm, bìa, tải về máy.
