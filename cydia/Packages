@@ -36,3 +36,22 @@ Name: GramBook
 Depiction: https://itovn.github.io/GramBook/cydia/depiction.html
 Homepage: https://itovn.github.io/GramBook/
 
+Package: vn.grambook.app
+Version: 1.0.2
+Architecture: iphoneos-arm
+Maintainer: GramBook
+Installed-Size: 7296
+Depends: firmware (>= 5.0)
+Filename: debs/vn.grambook.app_1.0.2_iphoneos-arm.deb
+Size: 3610310
+MD5sum: bac4df8c966edea099f970f42f15b4bd
+SHA1: 33a290abf6175851a418768baaec55a40cd04762
+SHA256: 47a3f42088b3126a28209d48237192e4f243a7d74bcfe95bc118a299d5dc80cd
+Section: Ebooks
+Description: Doc sach / ebook luu tren Telegram cho iOS 5 / 6: EPUB, MOBI, AZW3, lat trang cong, giao dien toi (khong chinh thuc)
+Author: GramBook
+Icon: file:///Applications/GramBook.app/Icon@2x.png
+Name: GramBook
+Depiction: https://itovn.github.io/GramBook/cydia/depiction.html
+Homepage: https://itovn.github.io/GramBook/
+

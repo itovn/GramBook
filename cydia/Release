@@ -7,10 +7,10 @@ Architectures: iphoneos-arm
 Components: main
 Description: GramBook — đọc sách / ebook từ Telegram cho iPhone / iPad iOS 5 / iOS 6 đã jailbreak — https://itovn.github.io/GramBook/
 MD5Sum:
- 8ae4f8aa6a7d43943a5406c2c7a60bc7 1410 Packages
- 589e946ca6892d490bb6fe9e00d47fdd 597 Packages.gz
- 552e316aa15c2507bf3b225fc3e000bd 714 Packages.bz2
+ f5efe6c2a89f695974faf66b8a342c94 2115 Packages
+ eaa032906b43ecb5546d9e8a458bcca5 718 Packages.gz
+ f7b74ccc681c8f8908f2e7f93cdc18f3 867 Packages.bz2
 SHA256:
- d7f4d2fd1527418d684774a6f7978353867741c18005a81bdb2178c412b74e2b 1410 Packages
- e996d6831f46dd4f3dea3a10a689158a537d2aa4423ec9898dcbadacb7ce419f 597 Packages.gz
- de7e3530b1d2e60bd575a813b035375a097a9b6fe80bb5e0acbc0a98f5ca8426 714 Packages.bz2
+ aa9df555f31f1cba69c52af9b3893c55baed35d21325bf0d38212f992f921ac5 2115 Packages
+ ba183312652d443cf646bc4a831846eabdbee8125f97c92e1aa8e150b6029b49 718 Packages.gz
+ 058745b27dcc51ec04bfe45b684998fb1fe92a0316d059f75da6546ad257276f 867 Packages.bz2
